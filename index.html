@@ -8,18 +8,20 @@
   <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=aa56ac6060fd0490d8e43d190156d7d7"></script>
   <style>
     :root {
-      --primary: #165dff;
-      --primary-dark: #0e42d2;
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --text: #1f2937;
-      --subtext: #667085;
-      --border: #e5e7eb;
-      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      --success: #12b76a;
-      --warn: #f79009;
-      --danger: #f04438;
-      --info: #00b8d9;
+      --bg: #f2f7fb;
+      --panel: rgba(255, 255, 255, 0.92);
+      --panel-solid: #ffffff;
+      --line: #dde7f0;
+      --text: #183046;
+      --muted: #60758a;
+      --brand: #0d6fb8;
+      --brand-dark: #084f86;
+      --accent: #0ea5a4;
+      --safe: #22a06b;
+      --watch: #2f80ed;
+      --warn: #f5a524;
+      --danger: #d64545;
+      --shadow: 0 18px 40px rgba(18, 41, 66, 0.12);
     }
 
     * {
@@ -28,11 +30,18 @@
       padding: 0;
     }
 
+    #admin-panel {
+  display: none !important;
+    }
+
     body {
+      min-height: 100vh;
       font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 220px);
       color: var(--text);
-      line-height: 1.5;
+      background:
+        radial-gradient(circle at top right, rgba(14, 165, 164, 0.16), transparent 26%),
+        linear-gradient(180deg, #dff0ff 0%, var(--bg) 240px);
+      line-height: 1.6;
     }
 
     a {
@@ -41,31 +50,29 @@
     }
 
     .hero {
-      background: linear-gradient(120deg, #1148cf 0%, #165dff 55%, #37a2ff 100%);
       color: #fff;
-      box-shadow: 0 8px 24px rgba(22, 93, 255, 0.18);
+      background:
+        linear-gradient(135deg, rgba(2, 53, 93, 0.94), rgba(13, 111, 184, 0.9)),
+        linear-gradient(120deg, #0b5ea8, #0ea5a4);
+      box-shadow: 0 10px 28px rgba(7, 45, 79, 0.18);
     }
 
-    .hero-inner,
-    .container {
-      max-width: 1280px;
+    .wrap {
+      width: min(1280px, calc(100% - 28px));
       margin: 0 auto;
-      padding-left: 20px;
-      padding-right: 20px;
     }
 
     .hero-inner {
-      padding-top: 20px;
-      padding-bottom: 28px;
+      padding: 22px 0 34px;
     }
 
     .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 28px;
+      gap: 16px;
       flex-wrap: wrap;
+      margin-bottom: 30px;
     }
 
     .brand {
@@ -75,105 +82,102 @@
     }
 
     .brand-badge {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
       display: grid;
       place-items: center;
-      background: rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(8px);
-      font-size: 22px;
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      font-size: 24px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(10px);
     }
 
     .brand-title {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 700;
       letter-spacing: 0.5px;
     }
 
     .brand-subtitle {
-      font-size: 13px;
-      opacity: 0.9;
       margin-top: 2px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.86);
     }
 
     nav {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-      font-size: 14px;
-    }
-
-    nav a {
-      opacity: 0.95;
-      padding: 8px 10px;
-      border-radius: 10px;
-      transition: 0.2s ease;
-    }
-
-    nav a:hover {
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    .hero-content {
-      display: grid;
-      grid-template-columns: 1.4fr 0.9fr;
-      gap: 24px;
-      align-items: stretch;
-    }
-
-    .hero-main {
-      padding: 10px 0;
-    }
-
-    .hero-main h1 {
-      font-size: 34px;
-      line-height: 1.25;
-      margin-bottom: 14px;
-    }
-
-    .hero-main p {
-      max-width: 760px;
-      color: rgba(255, 255, 255, 0.92);
-      font-size: 15px;
-      margin-bottom: 18px;
-    }
-
-    .hero-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
     }
 
-    .hero-tag {
+    nav a {
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .hero-main h1 {
+      font-size: 36px;
+      line-height: 1.22;
+      margin-bottom: 14px;
+    }
+
+    .hero-main p {
+      max-width: 760px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 15px;
+      margin-bottom: 18px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag {
       padding: 8px 12px;
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 999px;
       font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.12);
     }
 
     .hero-side {
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 22px;
-      padding: 20px;
-      backdrop-filter: blur(12px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 220px;
+      gap: 18px;
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(12px);
     }
 
     .hero-side h3 {
-      font-size: 16px;
+      font-size: 17px;
       margin-bottom: 10px;
     }
 
     .hero-side ul {
       padding-left: 18px;
-      color: rgba(255, 255, 255, 0.95);
+      color: rgba(255, 255, 255, 0.92);
       font-size: 14px;
     }
 
@@ -181,49 +185,63 @@
       margin-top: 8px;
     }
 
-    .container {
-      padding-top: 24px;
-      padding-bottom: 40px;
+    .hero-status {
+      display: inline-flex;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .main {
+      padding: 24px 0 42px;
+    }
+
+    .panel,
+    .card,
+    .map-box,
+    .detail-box,
+    .chart-box,
+    .table-box {
+      background: var(--panel);
+      border: 1px solid rgba(143, 173, 201, 0.22);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
     }
 
     .panel,
     .map-box,
-    .table-box,
-    .notice-box,
+    .detail-box,
     .chart-box,
-    .station-detail {
-      background: var(--card);
-      border: 1px solid rgba(15, 23, 42, 0.04);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
+    .table-box {
+      border-radius: 24px;
+      padding: 22px;
     }
 
-    .panel {
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .section-title {
+    .section-head {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 16px;
+      align-items: flex-end;
+      gap: 14px;
       flex-wrap: wrap;
+      margin-bottom: 16px;
     }
 
-    .section-title h3 {
-      font-size: 18px;
+    .section-head h2,
+    .section-head h3 {
+      font-size: 20px;
+      line-height: 1.3;
     }
 
-    .section-title p {
+    .section-head p {
+      color: var(--muted);
       font-size: 13px;
-      color: var(--subtext);
     }
 
     .toolbar {
       display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr auto auto;
+      grid-template-columns: 1.1fr 1fr 1fr 1fr auto;
       gap: 14px;
       align-items: end;
     }
@@ -236,275 +254,427 @@
 
     .field label {
       font-size: 13px;
-      color: var(--subtext);
+      color: var(--muted);
       font-weight: 600;
+    }
+
+    input,
+    select,
+    button {
+      border: none;
+      font: inherit;
     }
 
     input,
     select {
       width: 100%;
-      border: 1px solid var(--border);
-      background: #fff;
-      border-radius: 12px;
-      padding: 11px 14px;
-      font-size: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
       color: var(--text);
+      background: var(--panel-solid);
+      border: 1px solid var(--line);
       outline: none;
-      transition: 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     input:focus,
     select:focus {
-      border-color: rgba(22, 93, 255, 0.5);
-      box-shadow: 0 0 0 4px rgba(22, 93, 255, 0.1);
+      border-color: rgba(13, 111, 184, 0.5);
+      box-shadow: 0 0 0 4px rgba(13, 111, 184, 0.12);
     }
 
-    .btn-group {
+    .actions {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
 
     button {
-      border: none;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-weight: 700;
       cursor: pointer;
-      border-radius: 12px;
-      padding: 11px 18px;
-      font-size: 14px;
-      font-weight: 600;
-      transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
     }
 
     button:hover {
       transform: translateY(-1px);
     }
 
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-      box-shadow: 0 10px 20px rgba(22, 93, 255, 0.18);
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none;
     }
 
-    .btn-primary:hover {
-      background: var(--primary-dark);
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
     }
 
     .btn-secondary {
-      background: #eef4ff;
-      color: var(--primary);
+      color: var(--brand);
+      background: #e9f4fb;
     }
 
-    .btn-secondary:hover {
-      background: #dfeaff;
-    }
-
-    .status-bar {
+    .notice {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      color: #11486f;
+      background: #edf8ff;
+      border: 1px solid #d4edf8;
+    }
+
+    .status-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      align-items: center;
-      color: var(--subtext);
-      font-size: 13px;
+      margin-top: 14px;
     }
 
     .pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
+      gap: 8px;
+      padding: 7px 12px;
       border-radius: 999px;
-      background: #f8fafc;
-      border: 1px solid #edf2f7;
+      font-size: 13px;
+      color: var(--muted);
+      background: #f8fbfd;
+      border: 1px solid #e6eef4;
     }
 
-    .pill-dot {
+    .dot {
       width: 8px;
       height: 8px;
       border-radius: 999px;
-      background: var(--success);
+      background: var(--safe);
     }
 
     .cards {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 16px;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
 
     .card {
-      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-      border: 1px solid rgba(15, 23, 42, 0.04);
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
+      border-radius: 22px;
+      padding: 20px;
     }
 
     .card::after {
       content: "";
       position: absolute;
-      top: -18px;
-      right: -18px;
-      width: 72px;
-      height: 72px;
+      top: -20px;
+      right: -20px;
+      width: 84px;
+      height: 84px;
       border-radius: 50%;
-      background: rgba(22, 93, 255, 0.08);
+      background: rgba(13, 111, 184, 0.08);
     }
 
     .card h4 {
+      color: var(--muted);
       font-size: 14px;
-      color: var(--subtext);
-      margin-bottom: 10px;
-      font-weight: 600;
+      margin-bottom: 12px;
     }
 
-    .card .num {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--primary);
+    .num {
       position: relative;
       z-index: 1;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--brand-dark);
     }
 
-    .card .tip {
+    .tip {
+      position: relative;
+      z-index: 1;
       margin-top: 10px;
       font-size: 12px;
-      color: #7b8794;
-      position: relative;
-      z-index: 1;
+      color: var(--muted);
     }
 
     .dashboard {
       display: grid;
-      grid-template-columns: 1.35fr 0.65fr;
-      gap: 20px;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 18px;
       margin-bottom: 20px;
     }
 
-    .map-box,
-    .chart-box,
-    .station-detail,
-    .notice-box,
-    .table-box {
-      padding: 20px;
+    .side-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
     }
 
     #tideMap {
       width: 100%;
-      height: 430px;
-      border-radius: 16px;
+      height: 450px;
+      border-radius: 18px;
       overflow: hidden;
-    }
-
-    .station-detail {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      min-height: 430px;
+      background: linear-gradient(180deg, #eff8ff, #dfefff);
     }
 
     .detail-title {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 700;
     }
 
     .detail-subtitle {
+      margin-top: 4px;
+      color: var(--muted);
       font-size: 13px;
-      color: var(--subtext);
     }
 
     .detail-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
+      margin-top: 16px;
     }
 
     .detail-item {
       padding: 14px;
-      border-radius: 14px;
-      background: #f8fbff;
-      border: 1px solid #eef4ff;
+      border-radius: 16px;
+      background: #f7fbfe;
+      border: 1px solid #e2edf5;
     }
 
     .detail-item .label {
+      color: var(--muted);
       font-size: 12px;
-      color: var(--subtext);
       margin-bottom: 6px;
     }
 
     .detail-item .value {
       font-size: 18px;
       font-weight: 700;
-      color: var(--text);
     }
 
-    .notice-box ul {
-      padding-left: 18px;
-      color: var(--subtext);
-    }
-
-    .notice-box li + li {
-      margin-top: 8px;
-    }
-
-    .mini-chart {
-      height: 240px;
-      background: linear-gradient(180deg, #fcfdff 0%, #f6f9ff 100%);
-      border: 1px solid #edf2ff;
-      border-radius: 16px;
-      padding: 14px;
-    }
-
-    .chart-caption {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--subtext);
+    .advice-box {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fcfeff, #f2f9fd);
+      border: 1px solid #e0edf5;
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 64px;
-      padding: 6px 10px;
+      min-width: 70px;
+      padding: 7px 12px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 700;
       color: #fff;
     }
 
-    .badge-safe { background: var(--success); }
+    .badge-safe { background: var(--safe); }
+    .badge-watch { background: var(--watch); }
     .badge-warn { background: var(--warn); }
     .badge-danger { background: var(--danger); }
-    .badge-info { background: var(--info); }
+
+    .ai-result {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #f7fbfe;
+      border: 1px solid #e0edf5;
+      color: #35526d;
+      font-size: 14px;
+      white-space: pre-line;
+    }
+
+    .mini-chart {
+      height: 240px;
+      margin-top: 10px;
+      padding: 14px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fbfeff, #f2f8fc);
+      border: 1px solid #e0ebf4;
+    }
+
+    .chart-caption {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bullet-list {
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .bullet-list li + li {
+      margin-top: 8px;
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .risk-chip {
+      padding: 14px;
+      border-radius: 18px;
+      background: #f8fbfd;
+      border: 1px solid #e4edf4;
+    }
+
+    .risk-chip .name {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .risk-chip .count {
+      font-size: 22px;
+      font-weight: 700;
+    }
 
     .table-tools {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
       flex-wrap: wrap;
-    }
-
-    .table-tools .meta {
+      gap: 10px;
+      margin-bottom: 14px;
+      color: var(--muted);
       font-size: 13px;
-      color: var(--subtext);
     }
 
     .table-wrap {
       overflow: auto;
+      border-radius: 18px;
+      border: 1px solid #e4edf4;
+      background: #fff;
+    }
+
+    .admin-panel {
+      margin-bottom: 20px;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .admin-card {
+      padding: 20px;
+      border-radius: 22px;
+      background: #fdfefe;
+      border: 1px solid #e0ebf4;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .admin-card h4 {
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .admin-card p {
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .admin-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .admin-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .admin-userbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(13, 111, 184, 0.08), rgba(14, 165, 164, 0.12));
+      border: 1px solid rgba(13, 111, 184, 0.12);
+    }
+
+    .admin-userbar strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .admin-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .admin-stat {
+      min-width: 120px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #f7fbfd;
+      border: 1px solid #e4edf4;
+    }
+
+    .admin-stat .label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .admin-stat .value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--brand-dark);
+    }
+
+    .admin-table-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .admin-message {
+      margin-top: 14px;
+      padding: 12px 14px;
       border-radius: 14px;
-      border: 1px solid #eef2f7;
+      background: rgba(14, 165, 164, 0.08);
+      color: #0c5d5c;
+      font-size: 13px;
     }
 
     table {
       width: 100%;
       min-width: 980px;
       border-collapse: collapse;
-      background: #fff;
     }
 
     th,
@@ -512,49 +682,49 @@
       padding: 14px 12px;
       text-align: center;
       font-size: 14px;
-      border-bottom: 1px solid #f0f2f5;
+      border-bottom: 1px solid #edf3f7;
       white-space: nowrap;
     }
 
     th {
-      background: #f8fafc;
-      color: #475467;
-      font-weight: 700;
       position: sticky;
       top: 0;
       z-index: 1;
+      background: #f7fbfd;
+      color: #506477;
+      font-weight: 700;
     }
 
     tbody tr:hover {
-      background: #f9fbff;
+      background: #f9fcff;
     }
 
     .station-name {
       font-weight: 700;
-      color: var(--text);
+      color: var(--brand-dark);
       cursor: pointer;
     }
 
-    .empty-state,
-    .loading-state {
-      padding: 48px 16px;
+    .empty-state {
+      padding: 48px 14px;
       text-align: center;
-      color: var(--subtext);
+      color: var(--muted);
       font-size: 14px;
     }
 
     .footer {
+      padding-top: 12px;
+      color: #7d90a3;
       text-align: center;
-      color: #98a2b3;
-      padding-top: 10px;
       font-size: 13px;
     }
 
     @media (max-width: 1100px) {
-      .hero-content,
+      .hero-grid,
       .dashboard,
-      .toolbar,
-      .cards {
+      .cards,
+      .risk-grid,
+      .admin-grid {
         grid-template-columns: 1fr 1fr;
       }
 
@@ -563,37 +733,23 @@
       }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 760px) {
       .hero-main h1 {
-        font-size: 26px;
+        font-size: 28px;
       }
 
-      .hero-content,
+      .hero-grid,
       .dashboard,
       .cards,
+      .detail-grid,
+      .risk-grid,
       .toolbar,
-      .detail-grid {
+      .admin-grid {
         grid-template-columns: 1fr;
       }
 
-      .hero-inner,
-      .container {
-        padding-left: 14px;
-        padding-right: 14px;
-      }
-
-      #tideMap,
-      .station-detail {
-        min-height: auto;
+      #tideMap {
         height: 320px;
-      }
-
-      .station-detail {
-        height: auto;
-      }
-
-      .table-tools {
-        align-items: flex-start;
       }
     }
   </style>
@@ -601,60 +757,59 @@
 <body>
   <div id="app">
     <header class="hero">
-      <div class="hero-inner">
+      <div class="wrap hero-inner">
         <div class="topbar">
           <div class="brand">
-            <div class="brand-badge">🌊</div>
+            <div class="brand-badge">潮</div>
             <div>
               <div class="brand-title">钱塘江涌潮信息发布平台</div>
-              <div class="brand-subtitle">潮汐监测 · 观潮辅助 · 安全提示 · 站点查询</div>
+              <div class="brand-subtitle">潮汐监测 · 点位查询 · 风险提示 · 观潮辅助</div>
             </div>
           </div>
           <nav>
             <a href="#overview">综合看板</a>
             <a href="#map-area">站点地图</a>
+            <a href="#risk-area">风险分布</a>
+            <a href="#admin-panel">后台管理</a>
             <a href="#data-table">潮汐数据</a>
-            <a href="#tips">安全提示</a>
           </nav>
         </div>
 
-        <div class="hero-content">
+        <div class="hero-grid">
           <div class="hero-main">
-            <h1>面向观潮发布场景的钱塘江潮情信息展示页面</h1>
+            <h1>面向观潮发布场景的钱塘江潮情展示页面</h1>
             <p>
-              支持按日期查询、地图定位、站点筛选、风险等级展示与重点站点详情查看。页面仍兼容你现有的 CSV 数据方式，适合继续扩展为真实接口版本。
+              最适合你的涌潮信息发布网页
             </p>
-            <div class="hero-tags">
-              <span class="hero-tag">实时发布页风格</span>
-              <span class="hero-tag">适配桌面 / 平板 / 手机</span>
-              <span class="hero-tag">支持地图联动</span>
-              <span class="hero-tag">可继续接入后端接口</span>
+            <div class="tag-row">
+              <span class="tag">详细数据</span>
+              <span class="tag">支持桌面与移动端</span>
+              <span class="tag">地图与表格联动</span>
+              <span class="tag">可视化界面</span>
             </div>
           </div>
-          <div class="hero-side" id="tips">
+
+          <div class="hero-side">
             <div>
-              <h3>观潮提示</h3>
+              <h3>观潮提醒</h3>
               <ul>
-                <li>请根据当天潮位与涌高等级，选择合适观潮点位。</li>
-                <li>高等级潮情期间，请遵守现场警戒线与广播引导。</li>
-                <li>页面展示为示例数据逻辑，正式上线建议接入权威潮汐数据源。</li>
+                <li>高风险站点请优先参考现场警戒线与广播指引。</li>
+                <li>页面当前为示例数据展示</li>
+                <li>若后端 AI 服务未启动，页面会自动给出本地分析建议，不影响演示。</li>
               </ul>
             </div>
-            <div class="pill" style="width: fit-content; color: #fff; background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.12);">
-              <span class="pill-dot" style="background:#fff"></span>
-              当前状态：{{ loading ? '数据加载中' : '页面可查询' }}
-            </div>
+            <div class="hero-status">当前状态：{{ loading ? '数据加载中' : '页面可查询' }}</div>
           </div>
         </div>
       </div>
     </header>
 
-    <main class="container">
+    <main class="wrap main">
       <section class="panel" id="overview">
-        <div class="section-title">
+        <div class="section-head">
           <div>
-            <h3>查询与筛选</h3>
-            <p>选择日期后加载潮汐数据，可继续按站点名称或风险等级筛选。</p>
+            <h2>查询与筛选</h2>
+            <p>支持按日期、站点关键词、星级和排序方式快速过滤数据。</p>
           </div>
         </div>
 
@@ -666,19 +821,14 @@
 
           <div class="field">
             <label>站点关键词</label>
-            <input type="text" v-model.trim="keyword" placeholder="输入站点名称，例如：三堡 / 盐官" />
+            <input type="text" v-model.trim="keyword" placeholder="例如：三堡 / 盐官 / 九溪" />
           </div>
 
           <div class="field">
-            <label>观赏等级</label>
-            <select v-model="levelFilter">
-              <option value="全部">全部等级</option>
-              <option value="推荐">推荐</option>
-              <option value="较好">较好</option>
-              <option value="一般">一般</option>
-              <option value="谨慎">谨慎</option>
-              <option value="不建议">不建议</option>
-              <option value="无">无</option>
+            <label>观赏星级</label>
+            <select v-model="ratingFilter">
+              <option value="全部">全部星级</option>
+              <option v-for="rating in ratingOptions" :key="rating" :value="rating">{{ rating }}</option>
             </select>
           </div>
 
@@ -687,66 +837,68 @@
             <select v-model="sortBy">
               <option value="maxHeightDesc">按最大高潮位降序</option>
               <option value="maxSurgeDesc">按最大涌高降序</option>
-              <option value="nameAsc">按站点名称</option>
+              <option value="riskDesc">按风险等级降序</option>
+              <option value="nameAsc">按站点名称升序</option>
             </select>
           </div>
 
-          <div class="btn-group">
-            <button class="btn-primary" @click="searchData" :disabled="loading">
-              {{ loading ? '加载中...' : '查询数据' }}
-            </button>
+          <div class="actions">
+            <button class="btn-primary" @click="searchData">查询数据</button>
             <button class="btn-secondary" @click="resetFilters">重置筛选</button>
           </div>
         </div>
 
-        <div class="status-bar">
-          <div class="pill"><span class="pill-dot"></span>可查询日期：{{ availableDateRange.min || '--' }} 至 {{ availableDateRange.max || '--' }}</div>
+        <div class="notice" v-if="notice">
+          <strong>提示</strong>
+          <span>{{ notice }}</span>
+        </div>
+
+        <div class="status-row">
+          <div class="pill"><span class="dot"></span>可查询日期：{{ availableDateRange.min || '--' }} 至 {{ availableDateRange.max || '--' }}</div>
           <div class="pill">当前数据日期：{{ currentDataDate || '--' }}</div>
           <div class="pill">筛选结果：{{ displayedList.length }} 个站点</div>
         </div>
       </section>
 
       <section class="cards">
-        <div class="card">
-          <h4>监测站点总数</h4>
+        <article class="card">
+          <h4>有效站点数</h4>
           <div class="num">{{ summary.stationCount }}</div>
-          <div class="tip">已加载日期下的有效站点数量</div>
-        </div>
-        <div class="card">
+          <div class="tip">当前日期下解析到的站点总数</div>
+        </article>
+        <article class="card">
           <h4>最大高潮位</h4>
           <div class="num">{{ summary.maxTide }}<span style="font-size:15px; margin-left:4px;">m</span></div>
-          <div class="tip">早潮 / 晚潮中的最高值</div>
-        </div>
-        <div class="card">
+          <div class="tip">早潮与晚潮的最高值</div>
+        </article>
+        <article class="card">
           <h4>最大涌高</h4>
           <div class="num">{{ summary.maxSurge }}<span style="font-size:15px; margin-left:4px;">m</span></div>
           <div class="tip">用于辅助判断观潮强度</div>
-        </div>
-        <div class="card">
-          <h4>今日潮情等级</h4>
+        </article>
+        <article class="card">
+          <h4>综合潮情等级</h4>
           <div class="num">{{ summary.tideType }}</div>
-          <div class="tip">根据最大高潮位自动推断</div>
-        </div>
+          <div class="tip">根据最大高潮位自动判断</div>
+        </article>
       </section>
 
       <section class="dashboard">
-        <div class="map-box" id="map-area">
-          <div class="section-title">
+        <section class="map-box" id="map-area">
+          <div class="section-head">
             <div>
-              <h3>钱塘江潮汐监测点位地图</h3>
-              <p>点击地图站点可查看名称；点击表格站点名可联动定位并展示详情。</p>
+              <h3>钱塘江站点地图</h3>
+              <p>点击地图点位或表格站点名称，都可以联动右侧详情卡片。</p>
             </div>
           </div>
           <div id="tideMap"></div>
-        </div>
+        </section>
 
-        <div style="display:flex; flex-direction:column; gap:20px;">
-          <div class="station-detail">
-            <div>
-              <div class="detail-title">{{ selectedStation ? selectedStation.name : '站点详情' }}</div>
-              <div class="detail-subtitle">
-                {{ selectedStation ? '以下为当前选中站点的主要潮情指标' : '可在地图或表格中选择站点查看详情' }}
-              </div>
+        <div class="side-stack">
+          <section class="detail-box">
+            <div class="detail-title">{{ selectedStation ? selectedStation.name : '站点详情' }}</div>
+            <div class="detail-subtitle">
+              {{ selectedStation ? '当前展示所选站点的关键潮情指标和观潮建议。' : '请选择地图或表格中的站点。' }}
             </div>
 
             <template v-if="selectedStation">
@@ -769,20 +921,62 @@
                 </div>
               </div>
 
-              <div>
-                <div class="label" style="font-size:13px; color: var(--subtext); margin-bottom:8px;">综合建议</div>
-                <span class="badge" :class="badgeClass(stationRisk(selectedStation))">{{ stationRisk(selectedStation) }}</span>
-                <div style="margin-top:10px; color: var(--subtext); font-size: 14px;">
-                  {{ stationAdvice(selectedStation) }}
+              <div class="advice-box">
+                <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap;">
+                  <div>
+                    <div style="font-size:12px; color: var(--muted);">综合风险</div>
+                    <span class="badge" :class="badgeClass(stationRisk(selectedStation))">{{ stationRisk(selectedStation) }}</span>
+                  </div>
+                  <div>
+                    <div style="font-size:12px; color: var(--muted);">推荐星级</div>
+                    <span style="font-weight:700;">{{ stationBestRating(selectedStation) }}</span>
+                  </div>
                 </div>
+                <div style="margin-top:12px; color: var(--muted);">{{ stationAdvice(selectedStation) }}</div>
               </div>
             </template>
 
-            <div v-else class="empty-state" style="padding: 30px 12px;">暂无站点详情</div>
-          </div>
+            <div v-else class="empty-state">暂无站点详情</div>
+          </section>
 
-          <div class="chart-box">
-            <div class="section-title" style="margin-bottom: 10px;">
+          <section class="chart-box">
+  <div class="section-head">
+    <div>
+      <h3>智能分析</h3>
+      <p>优先调用本地接口，接口不可用时自动使用页面内置规则生成建议。</p>
+    </div>
+  </div>
+
+  <!-- 原有按钮（保留） -->
+  <button class="btn-primary" @click="askAI" :disabled="loadingAI || !tideList.length">
+    {{ loadingAI ? '分析中...' : '生成观潮建议' }}
+  </button>
+
+  <!-- 👉 新增：聊天框（就在按钮下面） -->
+  <div style="margin-top:16px;">
+    <input 
+      v-model="chatInput" 
+      placeholder="问点东西，比如：今天哪里适合观潮？"
+      style="width:100%; padding:10px; border-radius:10px; border:1px solid #ddd;"
+    />
+
+    <button class="btn-primary" @click="sendChat" style="margin-top:10px;">
+      发送
+    </button>
+
+    <!-- 聊天记录 -->
+    <div v-for="(msg, index) in chatHistory" :key="index" style="margin-top:10px;">
+      <div><strong>你：</strong>{{ msg.user }}</div>
+      <div><strong>AI：</strong>{{ msg.ai }}</div>
+    </div>
+  </div>
+
+  <!-- 原有AI分析结果（保留） -->
+  <div class="ai-result" v-if="aiResult">{{ aiResult }}</div>
+</section>
+
+          <section class="chart-box">
+            <div class="section-head">
               <div>
                 <h3>高潮位对比</h3>
                 <p>展示当前筛选结果中前 6 个站点的最大高潮位。</p>
@@ -792,64 +986,241 @@
               <svg width="100%" height="100%" viewBox="0 0 520 210" preserveAspectRatio="none">
                 <line x1="40" y1="180" x2="490" y2="180" stroke="#dbe5f0" stroke-width="1" />
                 <line x1="40" y1="20" x2="40" y2="180" stroke="#dbe5f0" stroke-width="1" />
-
                 <template v-for="(bar, index) in chartData" :key="bar.name">
                   <rect
-                    :x="60 + index * 70"
+                    :x="58 + index * 72"
                     :y="180 - bar.height"
-                    width="36"
+                    width="38"
                     :height="bar.height"
-                    rx="8"
-                    fill="#165dff"
-                    opacity="0.88"
+                    rx="9"
+                    fill="#0d6fb8"
+                    opacity="0.9"
                   />
                   <text
-                    :x="78 + index * 70"
-                    :y="174 - bar.height"
+                    :x="77 + index * 72"
+                    :y="172 - bar.height"
                     text-anchor="middle"
                     font-size="11"
-                    fill="#334155"
+                    fill="#29445f"
                   >{{ bar.value.toFixed(1) }}</text>
                   <text
-                    :x="78 + index * 70"
+                    :x="77 + index * 72"
                     y="196"
                     text-anchor="middle"
                     font-size="10"
-                    fill="#667085"
+                    fill="#60758a"
                   >{{ shortName(bar.name) }}</text>
                 </template>
               </svg>
             </div>
-            <div class="chart-caption">仅用于页面展示增强，正式场景可替换为 ECharts 等图表库。</div>
+            <div class="chart-caption">如果后续接入图表库，这里可以替换为趋势图或多日对比图。</div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel" id="risk-area" style="margin-bottom:20px;">
+        <div class="section-head">
+          <div>
+            <h3>风险分布</h3>
+            <p>根据高潮位、涌高和星级综合判定。</p>
+          </div>
+        </div>
+        <div class="risk-grid">
+          <div class="risk-chip">
+            <div class="name">高风险</div>
+            <div class="count" style="color:var(--danger)">{{ riskStats.high }}</div>
+          </div>
+          <div class="risk-chip">
+            <div class="name">警惕</div>
+            <div class="count" style="color:var(--warn)">{{ riskStats.warn }}</div>
+          </div>
+          <div class="risk-chip">
+            <div class="name">关注</div>
+            <div class="count" style="color:var(--watch)">{{ riskStats.watch }}</div>
+          </div>
+          <div class="risk-chip">
+            <div class="name">安全</div>
+            <div class="count" style="color:var(--safe)">{{ riskStats.safe }}</div>
           </div>
         </div>
       </section>
 
-      <section class="notice-box panel" style="padding: 20px;">
-        <div class="section-title" style="margin-bottom: 10px;">
+      <section class="panel admin-panel" id="admin-panel">
+        <div class="section-head">
           <div>
-            <h3>安全与发布建议</h3>
-            <p>这是面向信息发布页的内容补充，便于提升页面完整度。</p>
+            <h3>后台用户管理</h3>
+            <p>提供管理员登录、用户新增、编辑、停用和删除能力，数据保存在本地 JSON 文件。</p>
           </div>
         </div>
-        <ul>
-          <li>建议在正式系统中补充“数据来源、更新时间、数据责任单位”字段，提升权威性。</li>
-          <li>建议增加红黄蓝预警机制，并在高风险潮情时自动置顶相关站点。</li>
-          <li>如接入真实接口，可进一步增加“未来 3 日潮情趋势”“一键导出”“大屏模式”等能力。</li>
-        </ul>
+
+        <template v-if="!adminAuth.token">
+          <div class="admin-grid">
+            <section class="admin-card">
+              <h4>管理员登录</h4>
+              <p>首次可使用默认账号进入后台：`admin / admin123`。</p>
+              <div class="admin-form">
+                <div class="field">
+                  <label>管理员账号</label>
+                  <input type="text" v-model.trim="loginForm.username" placeholder="请输入管理员账号" />
+                </div>
+                <div class="field">
+                  <label>管理员密码</label>
+                  <input type="password" v-model="loginForm.password" placeholder="请输入管理员密码" @keyup.enter="adminLogin" />
+                </div>
+                <div class="admin-actions">
+                  <button class="btn-primary" @click="adminLogin" :disabled="loadingUsers">登录后台</button>
+                </div>
+              </div>
+              <div class="admin-message" v-if="userMessage">{{ userMessage }}</div>
+            </section>
+
+            <section class="admin-card">
+              <h4>功能说明</h4>
+              <p>这套后台是为你当前项目补的轻量管理端，适合课程设计、演示和后续扩展。</p>
+              <ul class="bullet-list">
+                <li>登录后可查看全部用户，并按角色和状态统一管理。</li>
+                <li>新增用户会立即写入 `data/users.json`，刷新页面后仍然保留。</li>
+                <li>如果你后面要接数据库，我也可以继续帮你迁移到 MySQL 或 MongoDB。</li>
+              </ul>
+            </section>
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="admin-userbar">
+            <div>
+              <strong>{{ adminAuth.profile.name || adminAuth.profile.username }}</strong>
+              <span>当前身份：{{ formatAdminRole(adminAuth.profile.role) }}</span>
+            </div>
+            <button class="btn-secondary" @click="adminLogout">退出登录</button>
+          </div>
+
+          <div class="admin-stats">
+            <div class="admin-stat">
+              <span class="label">用户总数</span>
+              <span class="value">{{ users.length }}</span>
+            </div>
+            <div class="admin-stat">
+              <span class="label">启用用户</span>
+              <span class="value">{{ activeUserCount }}</span>
+            </div>
+            <div class="admin-stat">
+              <span class="label">停用用户</span>
+              <span class="value">{{ disabledUserCount }}</span>
+            </div>
+          </div>
+
+          <div class="admin-grid">
+            <section class="admin-card">
+              <h4>{{ editingUserId ? "编辑用户" : "新增用户" }}</h4>
+              <p>维护后台账号信息，角色可按展示场景区分为管理员、编辑和查看者。</p>
+              <div class="admin-form">
+                <div class="field">
+                  <label>用户名</label>
+                  <input type="text" v-model.trim="userForm.username" placeholder="如：wangwu" />
+                </div>
+                <div class="field">
+                  <label>姓名</label>
+                  <input type="text" v-model.trim="userForm.name" placeholder="如：王五" />
+                </div>
+                <div class="field">
+                  <label>手机号</label>
+                  <input type="text" v-model.trim="userForm.phone" placeholder="选填" />
+                </div>
+                <div class="field">
+                  <label>角色</label>
+                  <select v-model="userForm.role">
+                    <option value="admin">管理员</option>
+                    <option value="editor">编辑</option>
+                    <option value="viewer">查看者</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>状态</label>
+                  <select v-model="userForm.status">
+                    <option value="active">启用</option>
+                    <option value="disabled">停用</option>
+                  </select>
+                </div>
+                <div class="admin-actions">
+                  <button class="btn-primary" @click="submitUserForm" :disabled="savingUser">
+                    {{ savingUser ? "保存中..." : (editingUserId ? "保存修改" : "创建用户") }}
+                  </button>
+                  <button class="btn-secondary" @click="resetUserForm">清空表单</button>
+                </div>
+              </div>
+              <div class="admin-message" v-if="userMessage">{{ userMessage }}</div>
+            </section>
+
+            <section class="admin-card">
+              <div class="admin-table-actions">
+                <div>共 {{ users.length }} 个后台用户</div>
+                <button class="btn-secondary" @click="loadUsers" :disabled="loadingUsers">
+                  {{ loadingUsers ? "刷新中..." : "刷新列表" }}
+                </button>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>用户名</th>
+                      <th>姓名</th>
+                      <th>手机号</th>
+                      <th>角色</th>
+                      <th>状态</th>
+                      <th>创建时间</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody v-if="loadingUsers">
+                    <tr>
+                      <td colspan="7" class="empty-state">用户数据加载中，请稍候...</td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else-if="users.length === 0">
+                    <tr>
+                      <td colspan="7" class="empty-state">当前还没有后台用户。</td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else>
+                    <tr v-for="user in users" :key="user.id">
+                      <td>{{ user.username }}</td>
+                      <td>{{ user.name }}</td>
+                      <td>{{ user.phone || "--" }}</td>
+                      <td>{{ formatUserRole(user.role) }}</td>
+                      <td>
+                        <span class="badge" :class="user.status === 'active' ? 'badge-safe' : 'badge-warn'">
+                          {{ user.status === "active" ? "启用" : "停用" }}
+                        </span>
+                      </td>
+                      <td>{{ formatDateTime(user.createdAt) }}</td>
+                      <td>
+                        <div class="admin-actions" style="justify-content:center;">
+                          <button class="btn-secondary" @click="startEditUser(user)">编辑</button>
+                          <button class="btn-secondary" @click="deleteUser(user)">删除</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </template>
       </section>
 
       <section class="table-box" id="data-table">
-        <div class="section-title">
+        <div class="section-head">
           <div>
             <h3>潮汐详细数据</h3>
-            <p>支持表格筛选与站点联动。</p>
+            <p>点击站点名称可以同步定位地图，并切换右侧详情。</p>
           </div>
         </div>
 
         <div class="table-tools">
-          <div class="meta">共 {{ displayedList.length }} 条记录</div>
-          <div class="meta">提示：点击“站点名称”可联动地图并查看右侧详情</div>
+          <div>共 {{ displayedList.length }} 条记录</div>
+          <div>当前排序：{{ sortLabel }}</div>
         </div>
 
         <div class="table-wrap">
@@ -865,30 +1236,33 @@
                 <th>晚高潮位(m)</th>
                 <th>晚涌高(m)</th>
                 <th>晚观赏等级</th>
-                <th>综合建议</th>
+                <th>综合风险</th>
               </tr>
             </thead>
+
             <tbody v-if="loading">
               <tr>
-                <td colspan="10" class="loading-state">数据加载中，请稍候...</td>
+                <td colspan="10" class="empty-state">数据加载中，请稍候...</td>
               </tr>
             </tbody>
+
             <tbody v-else-if="displayedList.length === 0">
               <tr>
-                <td colspan="10" class="empty-state">暂无匹配数据，请调整日期或筛选条件</td>
+                <td colspan="10" class="empty-state">暂无匹配数据，请调整筛选条件。</td>
               </tr>
             </tbody>
+
             <tbody v-else>
               <tr v-for="item in displayedList" :key="item.name">
                 <td class="station-name" @click="focusStation(item)">{{ item.name }}</td>
                 <td>{{ item.morningTime || '--' }}</td>
                 <td>{{ formatNumber(item.morningHeight) }}</td>
                 <td>{{ formatNumber(item.morningSurge) }}</td>
-                <td><span class="badge" :class="badgeClass(levelToRisk(item.morningLevel))">{{ item.morningLevel || '无' }}</span></td>
+                <td>{{ item.morningRating }}</td>
                 <td>{{ item.nightTime || '--' }}</td>
                 <td>{{ formatNumber(item.nightHeight) }}</td>
                 <td>{{ formatNumber(item.nightSurge) }}</td>
-                <td><span class="badge" :class="badgeClass(levelToRisk(item.nightLevel))">{{ item.nightLevel || '无' }}</span></td>
+                <td>{{ item.nightRating }}</td>
                 <td><span class="badge" :class="badgeClass(stationRisk(item))">{{ stationRisk(item) }}</span></td>
               </tr>
             </tbody>
@@ -896,7 +1270,7 @@
         </div>
       </section>
 
-      <div class="footer">钱塘江涌潮信息发布平台 © 2026 · 页面增强示例版</div>
+      <div class="footer">钱塘江涌潮信息发布平台 · 2026 页面增强示例版</div>
     </main>
   </div>
 
@@ -906,30 +1280,56 @@
     createApp({
       data() {
         return {
-          queryDate: '2025-04-01',
-          keyword: '',
-          levelFilter: '全部',
-          sortBy: 'maxHeightDesc',
+          chatInput: "",
+          chatHistory: [],
+          queryDate: "2025-04-01",
+          keyword: "",
+          ratingFilter: "全部",
+          sortBy: "maxHeightDesc",
+          loading: false,
+          loadingAI: false,
+          notice: "",
+          aiResult: "",
           allCsvData: [],
           tideList: [],
-          loading: false,
-          map: null,
-          siteMarkers: [],
           selectedStation: null,
+          users: [],
+          loadingUsers: false,
+          savingUser: false,
+          editingUserId: "",
+          userMessage: "",
+          adminAuth: {
+            token: "",
+            profile: {}
+          },
+          loginForm: {
+            username: "admin",
+            password: "admin123"
+          },
+          userForm: {
+            username: "",
+            name: "",
+            phone: "",
+            role: "viewer",
+            status: "active"
+          },
+          map: null,
+          mapReady: false,
           markerMap: {},
+          siteMarkers: [],
           stations: [
-            { name: '大江东八工段（盐官）', lng: 120.48, lat: 30.42 },
-            { name: '850磐头', lng: 120.47, lat: 30.36 },
-            { name: '观潮城(萧山仓前)', lng: 120.45, lat: 30.32 },
-            { name: '下沙大桥', lng: 120.40, lat: 30.28 },
-            { name: '七堡', lng: 120.28, lat: 30.26 },
-            { name: '三堡', lng: 120.23, lat: 30.25 },
-            { name: '城市阳台(奥体)', lng: 120.21, lat: 30.24 },
-            { name: '南星桥', lng: 120.18, lat: 30.22 },
-            { name: '闸口', lng: 120.15, lat: 30.21 },
-            { name: '九溪', lng: 120.12, lat: 30.20 },
-            { name: '大刀沙', lng: 120.10, lat: 30.18 },
-            { name: '闻家堰', lng: 120.08, lat: 30.17 }
+            { name: "大江东八工段（盐官）", lng: 120.48, lat: 30.42 },
+            { name: "850磐头", lng: 120.47, lat: 30.36 },
+            { name: "观潮城(萧山仓前)", lng: 120.45, lat: 30.32 },
+            { name: "下沙大桥", lng: 120.40, lat: 30.28 },
+            { name: "七堡", lng: 120.28, lat: 30.26 },
+            { name: "三堡", lng: 120.23, lat: 30.25 },
+            { name: "城市阳台(奥体)", lng: 120.21, lat: 30.24 },
+            { name: "南星桥", lng: 120.18, lat: 30.22 },
+            { name: "闸口", lng: 120.15, lat: 30.21 },
+            { name: "九溪", lng: 120.12, lat: 30.20 },
+            { name: "大刀沙", lng: 120.10, lat: 30.18 },
+            { name: "闻家堰", lng: 120.08, lat: 30.17 }
           ]
         };
       },
@@ -937,12 +1337,15 @@
         availableDateRange() {
           const dates = [...new Set(this.allCsvData.map(item => item.date).filter(Boolean))].sort();
           return {
-            min: dates[0] || '',
-            max: dates[dates.length - 1] || ''
+            min: dates[0] || "",
+            max: dates[dates.length - 1] || ""
           };
         },
         currentDataDate() {
-          return this.tideList[0]?.rawDate || '--';
+          return this.tideList[0]?.rawDate || "--";
+        },
+        ratingOptions() {
+          return [...new Set(this.tideList.flatMap(item => [item.morningRating, item.nightRating]).filter(Boolean))];
         },
         displayedList() {
           let list = [...this.tideList];
@@ -952,57 +1355,333 @@
             list = list.filter(item => item.name.toLowerCase().includes(kw));
           }
 
-          if (this.levelFilter !== '全部') {
-            list = list.filter(item => item.morningLevel === this.levelFilter || item.nightLevel === this.levelFilter);
+          if (this.ratingFilter !== "全部") {
+            list = list.filter(item => item.morningRating === this.ratingFilter || item.nightRating === this.ratingFilter);
           }
 
-          if (this.sortBy === 'maxHeightDesc') {
+          const riskWeight = { "高风险": 4, "警惕": 3, "关注": 2, "安全": 1 };
+
+          if (this.sortBy === "maxHeightDesc") {
             list.sort((a, b) => this.stationMaxHeight(b) - this.stationMaxHeight(a));
-          } else if (this.sortBy === 'maxSurgeDesc') {
+          } else if (this.sortBy === "maxSurgeDesc") {
             list.sort((a, b) => this.stationMaxSurge(b) - this.stationMaxSurge(a));
-          } else if (this.sortBy === 'nameAsc') {
-            list.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+          } else if (this.sortBy === "riskDesc") {
+            list.sort((a, b) => riskWeight[this.stationRisk(b)] - riskWeight[this.stationRisk(a)]);
+          } else if (this.sortBy === "nameAsc") {
+            list.sort((a, b) => a.name.localeCompare(b.name, "zh-CN"));
           }
 
           return list;
         },
         summary() {
-          const heights = this.tideList.flatMap(item => [item.morningHeight, item.nightHeight]).filter(v => !Number.isNaN(v));
-          const surges = this.tideList.flatMap(item => [item.morningSurge, item.nightSurge]).filter(v => !Number.isNaN(v));
+          const heights = this.tideList.flatMap(item => [item.morningHeight, item.nightHeight]).filter(v => Number.isFinite(v));
+          const surges = this.tideList.flatMap(item => [item.morningSurge, item.nightSurge]).filter(v => Number.isFinite(v));
           const maxTide = heights.length ? Math.max(...heights) : 0;
           const maxSurge = surges.length ? Math.max(...surges) : 0;
           return {
-            stationCount: this.tideList.length || '--',
-            maxTide: heights.length ? maxTide.toFixed(1) : '--',
-            maxSurge: surges.length ? maxSurge.toFixed(1) : '--',
+            stationCount: this.tideList.length || "--",
+            maxTide: heights.length ? maxTide.toFixed(1) : "--",
+            maxSurge: surges.length ? maxSurge.toFixed(1) : "--",
             tideType: this.inferTideType(maxTide)
           };
         },
+        riskStats() {
+          return this.displayedList.reduce((acc, item) => {
+            const risk = this.stationRisk(item);
+            if (risk === "高风险") acc.high += 1;
+            else if (risk === "警惕") acc.warn += 1;
+            else if (risk === "关注") acc.watch += 1;
+            else acc.safe += 1;
+            return acc;
+          }, { high: 0, warn: 0, watch: 0, safe: 0 });
+        },
         chartData() {
           const top = this.displayedList.slice(0, 6);
-          const max = Math.max(...top.map(item => this.stationMaxHeight(item)), 1);
+          const maxValue = Math.max(...top.map(item => this.stationMaxHeight(item)), 1);
           return top.map(item => ({
             name: item.name,
             value: this.stationMaxHeight(item),
-            height: Math.max(18, (this.stationMaxHeight(item) / max) * 130)
+            height: Math.max(18, (this.stationMaxHeight(item) / maxValue) * 130)
           }));
+        },
+        sortLabel() {
+          const labels = {
+            maxHeightDesc: "最大高潮位降序",
+            maxSurgeDesc: "最大涌高降序",
+            riskDesc: "风险等级降序",
+            nameAsc: "站点名称升序"
+          };
+          return labels[this.sortBy] || "--";
+        },
+        activeUserCount() {
+          return this.users.filter(item => item.status === "active").length;
+        },
+        disabledUserCount() {
+          return this.users.filter(item => item.status === "disabled").length;
         }
       },
       mounted() {
         this.initMap();
         this.loadAllCsvData();
+        this.restoreAdminSession();
       },
       methods: {
+        setNotice(message) {
+          this.notice = message;
+        },
+        async apiRequest(url, options = {}) {
+          const headers = {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+          };
+
+          if (this.adminAuth.token) {
+            headers.Authorization = `Bearer ${this.adminAuth.token}`;
+          }
+
+          const response = await fetch(url, {
+            ...options,
+            headers
+          });
+
+          let payload = {};
+          try {
+            payload = await response.json();
+          } catch (error) {
+            payload = {};
+          }
+
+          if (!response.ok) {
+            throw new Error(payload.message || "请求失败");
+          }
+
+          return payload;
+        },
+        restoreAdminSession() {
+          const token = localStorage.getItem("admin_token");
+          const profile = localStorage.getItem("admin_profile");
+          if (!token || !profile) return;
+
+          this.adminAuth.token = token;
+          try {
+            this.adminAuth.profile = JSON.parse(profile);
+          } catch (error) {
+            this.adminAuth.profile = {};
+          }
+
+          this.loadUsers();
+        },
+        async adminLogin() {
+          this.loadingUsers = true;
+          this.userMessage = "";
+
+          try {
+            const data = await this.apiRequest("/api/admin/login", {
+              method: "POST",
+              body: JSON.stringify(this.loginForm)
+            });
+
+            this.adminAuth.token = data.token;
+            this.adminAuth.profile = data.profile || {};
+            localStorage.setItem("admin_token", data.token);
+            localStorage.setItem("admin_profile", JSON.stringify(this.adminAuth.profile));
+            this.userMessage = "登录成功，已进入后台管理。";
+            await this.loadUsers();
+          } catch (error) {
+            this.userMessage = error.message;
+          } finally {
+            this.loadingUsers = false;
+          }
+        },
+        async sendChat() {
+          if (!this.chatInput || !this.chatInput.trim()) return;
+
+          const question = this.chatInput.trim();
+
+          try {
+            console.log("[Chat] 发送问题:", question);
+            
+            const res = await fetch("/api/deepseek", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                message: question
+              })
+            });
+
+            console.log("[Chat] 响应状态:", res.status);
+
+            if (!res.ok) {
+              const errorText = await res.text();
+              console.error("[Chat] API 错误:", res.status, errorText);
+              throw new Error(`服务器返回错误 (${res.status})`);
+            }
+
+            const data = await res.json();
+            console.log("[Chat] 返回数据:", data);
+
+            const answer = data.choices?.[0]?.message?.content || "AI 返回内容为空";
+            if (!answer) {
+              throw new Error("AI 返回格式异常");
+            }
+
+            this.chatHistory.push({
+              user: question,
+              ai: answer
+            });
+
+            this.chatInput = "";
+            console.log("[Chat] 消息已添加到历史");
+          } catch (err) {
+            console.error("[Chat] 错误:", err.message);
+            this.chatHistory.push({
+              user: question,
+              ai: "❌ 请求失败：" + err.message
+            });
+          }
+        },
+        async adminLogout() {
+          try {
+            await this.apiRequest("/api/admin/logout", {
+              method: "POST",
+              body: JSON.stringify({})
+            });
+          } catch (error) {
+            // Keep local cleanup even if the request fails.
+          }
+
+          this.adminAuth.token = "";
+          this.adminAuth.profile = {};
+          this.users = [];
+          this.userMessage = "你已退出后台登录。";
+          this.resetUserForm();
+          localStorage.removeItem("admin_token");
+          localStorage.removeItem("admin_profile");
+        },
+        async loadUsers() {
+          if (!this.adminAuth.token) return;
+          this.loadingUsers = true;
+
+          try {
+            const data = await this.apiRequest("/api/users");
+            this.users = data.users || [];
+          } catch (error) {
+            if (error.message === "Unauthorized") {
+              this.adminLogout();
+            } else {
+              this.userMessage = error.message;
+            }
+          } finally {
+            this.loadingUsers = false;
+          }
+        },
+        resetUserForm() {
+          this.editingUserId = "";
+          this.userForm = {
+            username: "",
+            name: "",
+            phone: "",
+            role: "viewer",
+            status: "active"
+          };
+        },
+        startEditUser(user) {
+          this.editingUserId = user.id;
+          this.userForm = {
+            username: user.username,
+            name: user.name,
+            phone: user.phone || "",
+            role: user.role || "viewer",
+            status: user.status || "active"
+          };
+          this.userMessage = `正在编辑用户：${user.name}`;
+        },
+        async submitUserForm() {
+          if (!this.adminAuth.token) {
+            this.userMessage = "请先登录后台。";
+            return;
+          }
+
+          this.savingUser = true;
+          this.userMessage = "";
+
+          try {
+            if (this.editingUserId) {
+              await this.apiRequest(`/api/users/${this.editingUserId}`, {
+                method: "PUT",
+                body: JSON.stringify(this.userForm)
+              });
+              this.userMessage = "用户信息已更新。";
+            } else {
+              await this.apiRequest("/api/users", {
+                method: "POST",
+                body: JSON.stringify(this.userForm)
+              });
+              this.userMessage = "新用户已创建。";
+            }
+
+            this.resetUserForm();
+            await this.loadUsers();
+          } catch (error) {
+            this.userMessage = error.message;
+          } finally {
+            this.savingUser = false;
+          }
+        },
+        async deleteUser(user) {
+          if (!confirm(`确定删除用户“${user.name}”吗？`)) return;
+
+          try {
+            await this.apiRequest(`/api/users/${user.id}`, {
+              method: "DELETE"
+            });
+            if (this.editingUserId === user.id) {
+              this.resetUserForm();
+            }
+            this.userMessage = "用户已删除。";
+            await this.loadUsers();
+          } catch (error) {
+            this.userMessage = error.message;
+          }
+        },
+        formatUserRole(role) {
+          const labels = {
+            admin: "管理员",
+            editor: "编辑",
+            viewer: "查看者"
+          };
+          return labels[role] || role || "--";
+        },
+        formatAdminRole(role) {
+          if (role === "super_admin") return "超级管理员";
+          return this.formatUserRole(role);
+        },
+        formatDateTime(value) {
+          if (!value) return "--";
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) return value;
+          return date.toLocaleString("zh-CN", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+        },
         async loadAllCsvData() {
           this.loading = true;
+          this.setNotice("正在读取本地 CSV 数据...");
           try {
-            const res = await fetch('./tide_data_4.1-4.7.csv');
-            if (!res.ok) throw new Error('CSV 文件读取失败');
-            const text = await res.text();
+            const response = await fetch("./tide_data_4.1-4.7.csv");
+            if (!response.ok) throw new Error("CSV 文件读取失败");
+
+            const text = await response.text();
             this.allCsvData = this.parseCsv(text);
 
             if (!this.availableDateRange.min) {
-              throw new Error('CSV 中未解析到有效日期');
+              throw new Error("CSV 中没有可用日期");
             }
 
             if (!this.queryDate || this.queryDate < this.availableDateRange.min || this.queryDate > this.availableDateRange.max) {
@@ -1010,43 +1689,46 @@
             }
 
             this.searchData(false);
-          } catch (err) {
-            console.error(err);
-            alert('CSV 数据加载失败，请检查 tide_data_4.1-4.7.csv 是否与页面位于同级目录。');
+          } catch (error) {
+            console.error(error);
+            this.setNotice("CSV 加载失败，请确认 tide_data_4.1-4.7.csv 与页面处于同级目录。");
           } finally {
             this.loading = false;
           }
         },
-
         parseCsv(text) {
-          const rows = [];
-          const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/).filter(Boolean);
-          if (!lines.length) return rows;
+          const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/).filter(Boolean);
+          if (!lines.length) return [];
 
-          const headers = lines[0].split(',').map(h => h.trim());
-          for (let i = 1; i < lines.length; i++) {
-            const cols = lines[i].split(',').map(c => c.trim());
-            if (!cols.length || cols.every(c => !c)) continue;
+          const headers = lines[0].split(",").map(item => item.trim());
+          return lines.slice(1).map(line => {
+            const columns = line.split(",").map(item => item.trim());
             const row = {};
-            headers.forEach((h, idx) => {
-              row[h] = cols[idx] ?? '';
+            headers.forEach((header, index) => {
+              row[header] = columns[index] ?? "";
             });
-            rows.push(row);
-          }
-          return rows;
+            return row;
+          });
         },
-
         initMap() {
-          this.map = new AMap.Map('tideMap', {
+          if (!window.AMap) {
+            this.setNotice("高德地图脚本加载失败，页面仍可正常查看表格数据。");
+            return;
+          }
+
+          this.map = new AMap.Map("tideMap", {
             zoom: 11,
             center: [120.30, 30.27],
             resizeEnable: true,
-            mapStyle: 'amap://styles/normal'
+            mapStyle: "amap://styles/normal"
           });
-          this.addQiantangMarkers();
-        },
 
-        addQiantangMarkers() {
+          this.mapReady = true;
+          this.addMarkers();
+        },
+        addMarkers() {
+          if (!this.mapReady || !this.map) return;
+
           this.siteMarkers.forEach(marker => marker.remove());
           this.siteMarkers = [];
           this.markerMap = {};
@@ -1058,18 +1740,13 @@
               offset: new AMap.Pixel(-10, -28)
             });
 
-            marker.on('click', () => {
-              const matched = this.displayedList.find(item => item.name === site.name) || this.tideList.find(item => item.name === site.name);
-              if (matched) this.selectedStation = matched;
-              new AMap.InfoWindow({
-                offset: new AMap.Pixel(0, -25),
-                content: `
-                  <div style="padding:10px 12px; min-width:180px; line-height:1.6;">
-                    <div style="font-weight:700; margin-bottom:4px; color:#1f2937;">${site.name}</div>
-                    <div style="font-size:12px; color:#667085;">点击表格站点可同步查看详情</div>
-                  </div>
-                `
-              }).open(this.map, marker.getPosition());
+            marker.on("click", () => {
+              const matched = this.tideList.find(item => item.name === site.name);
+              if (matched) {
+                this.focusStation(matched, false);
+              } else {
+                this.openMapWindow(site, null);
+              }
             });
 
             marker.setMap(this.map);
@@ -1077,148 +1754,193 @@
             this.markerMap[site.name] = { marker, site };
           });
         },
+        openMapWindow(site, item) {
+          if (!this.mapReady) return;
 
-        searchData(showAlert = true) {
+          const riskText = item ? this.stationRisk(item) : "暂无数据";
+          const html = `
+            <div style="padding:10px 12px; min-width:220px; line-height:1.7;">
+              <div style="font-weight:700; color:#183046; margin-bottom:4px;">${site.name}</div>
+              <div style="font-size:12px; color:#60758a;">综合风险：${riskText}</div>
+              <div style="font-size:12px; color:#60758a;">${item ? `最大高潮位：${this.stationMaxHeight(item).toFixed(1)} m` : "当前日期暂无匹配潮汐数据"}</div>
+            </div>
+          `;
+
+          new AMap.InfoWindow({
+            offset: new AMap.Pixel(0, -25),
+            content: html
+          }).open(this.map, [site.lng, site.lat]);
+        },
+        searchData(showMessage = true) {
+          if (!this.allCsvData.length) return;
+
           this.loading = true;
           try {
-            const filtered = this.allCsvData.filter(row => row.date === this.queryDate);
-            if (!filtered.length) {
+            const matched = this.allCsvData.filter(item => item.date === this.queryDate);
+
+            if (!matched.length) {
               this.tideList = [];
               this.selectedStation = null;
-              if (showAlert) alert(`暂无 ${this.queryDate} 的数据，请选择 ${this.availableDateRange.min} 至 ${this.availableDateRange.max}`);
+              this.setNotice(`暂无 ${this.queryDate} 的数据，请选择 ${this.availableDateRange.min} 至 ${this.availableDateRange.max} 之间的日期。`);
               return;
             }
 
-            this.tideList = filtered.map(item => ({
+            this.tideList = matched.map(item => ({
               name: item.station,
               morningTime: item.morning_time,
               morningHeight: this.toNumber(item.morning_level),
               morningSurge: this.toNumber(item.morning_wave),
-              morningLevel: item.morning_rating || '无',
+              morningRating: item.morning_rating || "无",
               nightTime: item.evening_time,
               nightHeight: this.toNumber(item.evening_level),
               nightSurge: this.toNumber(item.evening_wave),
-              nightLevel: item.evening_rating || '无',
+              nightRating: item.evening_rating || "无",
               rawDate: item.date
             }));
 
             this.selectedStation = this.displayedList[0] || this.tideList[0] || null;
-            if (this.selectedStation) this.focusStation(this.selectedStation, false);
-            if (showAlert) alert(`已加载 ${this.queryDate} 的潮汐数据，共 ${this.tideList.length} 个站点。`);
-          } catch (err) {
-            console.error(err);
-            alert('数据解析失败，请检查 CSV 字段命名是否正确。');
+            if (this.selectedStation) this.focusStation(this.selectedStation, true);
+            if (showMessage) {
+              this.setNotice(`已加载 ${this.queryDate} 的潮汐数据，共 ${this.tideList.length} 个站点。`);
+            }
+          } catch (error) {
+            console.error(error);
+            this.setNotice("数据解析失败，请检查 CSV 字段名是否正确。");
           } finally {
             this.loading = false;
           }
         },
-
         resetFilters() {
-          this.keyword = '';
-          this.levelFilter = '全部';
-          this.sortBy = 'maxHeightDesc';
+          this.keyword = "";
+          this.ratingFilter = "全部";
+          this.sortBy = "maxHeightDesc";
+          this.aiResult = "";
+          this.setNotice(`筛选条件已重置，当前展示 ${this.queryDate} 的全部站点。`);
         },
-
         focusStation(item, moveMap = true) {
           this.selectedStation = item;
           const target = this.markerMap[item.name];
-          if (target && moveMap && this.map) {
+          if (moveMap && this.mapReady && target) {
             this.map.setZoomAndCenter(12, [target.site.lng, target.site.lat]);
-            new AMap.InfoWindow({
-              offset: new AMap.Pixel(0, -25),
-              content: `
-                <div style="padding:10px 12px; min-width:210px; line-height:1.7;">
-                  <div style="font-weight:700; color:#1f2937; margin-bottom:4px;">${item.name}</div>
-                  <div style="font-size:12px; color:#475467;">最大高潮位：${this.stationMaxHeight(item).toFixed(1)} m</div>
-                  <div style="font-size:12px; color:#475467;">最大涌高：${this.stationMaxSurge(item).toFixed(1)} m</div>
-                  <div style="font-size:12px; color:#165dff; font-weight:700; margin-top:4px;">综合建议：${this.stationRisk(item)}</div>
-                </div>
-              `
-            }).open(this.map, target.marker.getPosition());
+          }
+          if (this.mapReady && target) {
+            this.openMapWindow(target.site, item);
           }
         },
-
         toNumber(value) {
-          const num = parseFloat(value);
-          return Number.isFinite(num) ? num : 0;
+          const number = Number.parseFloat(value);
+          return Number.isFinite(number) ? number : 0;
         },
-
         formatNumber(value) {
-          return Number.isFinite(value) ? value.toFixed(1) : '--';
+          return Number.isFinite(value) ? value.toFixed(1) : "--";
         },
-
         stationMaxHeight(item) {
           return Math.max(item.morningHeight || 0, item.nightHeight || 0);
         },
-
         stationMaxSurge(item) {
           return Math.max(item.morningSurge || 0, item.nightSurge || 0);
         },
-
+        stationBestRating(item) {
+          const rank = { "无": 0, "一星": 1, "二星": 2, "三星": 3, "四星": 4 };
+          return rank[item.morningRating] >= rank[item.nightRating] ? item.morningRating : item.nightRating;
+        },
         inferTideType(maxHeight) {
-          if (!maxHeight) return '--';
-          if (maxHeight >= 5) return '特大潮汛';
-          if (maxHeight >= 4) return '大潮汛';
-          if (maxHeight >= 3) return '中潮汛';
-          return '平潮';
+          if (!maxHeight) return "--";
+          if (maxHeight >= 5.5) return "特大潮汛";
+          if (maxHeight >= 4.6) return "大潮汛";
+          if (maxHeight >= 3.6) return "中潮汛";
+          return "平潮";
         },
-
-        levelToRisk(level) {
-          const map = {
-            '推荐': '安全',
-            '较好': '关注',
-            '一般': '关注',
-            '谨慎': '警惕',
-            '不建议': '高风险',
-            '无': '信息'
-          };
-          return map[level] || '信息';
+        ratingScore(rating) {
+          const rank = { "无": 0, "一星": 1, "二星": 2, "三星": 3, "四星": 4 };
+          return rank[rating] ?? 0;
         },
-
         stationRisk(item) {
           const maxHeight = this.stationMaxHeight(item);
           const maxSurge = this.stationMaxSurge(item);
-          const hasDangerLevel = [item.morningLevel, item.nightLevel].includes('不建议');
-          const hasWarnLevel = [item.morningLevel, item.nightLevel].includes('谨慎');
+          const bestRating = Math.max(this.ratingScore(item.morningRating), this.ratingScore(item.nightRating));
 
-          if (hasDangerLevel || maxHeight >= 5 || maxSurge >= 2.2) return '高风险';
-          if (hasWarnLevel || maxHeight >= 4 || maxSurge >= 1.6) return '警惕';
-          if (maxHeight >= 3 || maxSurge >= 1.0) return '关注';
-          return '安全';
+          if (maxHeight >= 5.4 || maxSurge >= 1.8) return "高风险";
+          if (maxHeight >= 4.8 || maxSurge >= 1.2) return "警惕";
+          if (bestRating >= 3 || maxHeight >= 4.2 || maxSurge >= 0.6) return "关注";
+          return "安全";
         },
-
         stationAdvice(item) {
           const risk = this.stationRisk(item);
-          if (risk === '高风险') return '建议加强现场疏导，不宜近距离停留观潮。';
-          if (risk === '警惕') return '建议在指定安全区观潮，注意现场广播与警示标识。';
-          if (risk === '关注') return '适合常规观潮，但仍需注意潮水变化与站位安全。';
-          return '潮情相对平稳，适合一般观赏。';
+          if (risk === "高风险") return "建议加强现场疏导，不宜贴近堤岸或低位平台观潮。";
+          if (risk === "警惕") return "建议在指定安全区域内观潮，注意潮头变化和工作人员引导。";
+          if (risk === "关注") return "适合常规观潮，但仍需预留退让空间，避免靠近临江边线。";
+          return "潮情相对平稳，适合一般观赏与讲解演示。";
         },
-
         badgeClass(risk) {
-          if (risk === '安全') return 'badge-safe';
-          if (risk === '关注') return 'badge-info';
-          if (risk === '警惕') return 'badge-warn';
-          if (risk === '高风险') return 'badge-danger';
-          return 'badge-info';
+          if (risk === "安全") return "badge-safe";
+          if (risk === "关注") return "badge-watch";
+          if (risk === "警惕") return "badge-warn";
+          return "badge-danger";
         },
-
         shortName(name) {
           return name.length > 4 ? name.slice(0, 4) : name;
+        },
+        buildLocalAdvice() {
+          const topRisk = this.displayedList
+            .slice()
+            .sort((a, b) => this.stationMaxHeight(b) - this.stationMaxHeight(a))
+            .slice(0, 3)
+            .map(item => `${item.name}（${this.stationRisk(item)}）`)
+            .join("、");
+
+          return [
+            `当前日期 ${this.currentDataDate} 的整体潮情等级为 ${this.summary.tideType}。`,
+            `最大高潮位约 ${this.summary.maxTide}m，最大涌高约 ${this.summary.maxSurge}m。`,
+            `建议重点关注站点：${topRisk || "暂无"}。`,
+            "若用于演示，建议将地图联动站点作为重点说明区域，并同步展示安全提示。"
+          ].join("\n");
+        },
+        async askAI() {
+          this.loadingAI = true;
+          this.aiResult = "";
+          try {
+            const response = await fetch("/api/deepseek", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                message: `当前日期为 ${this.currentDataDate}，最大高潮位 ${this.summary.maxTide}m，最大涌高 ${this.summary.maxSurge}m，请给出钱塘江观潮安全建议。`
+              })
+            });
+
+            if (!response.ok) throw new Error("AI 接口不可用");
+            const data = await response.json();
+            const content = data?.choices?.[0]?.message?.content;
+            if (!content) throw new Error("AI 返回格式异常");
+
+            this.aiResult = content;
+            this.setNotice("已生成接口版观潮建议。");
+          } catch (error) {
+            console.error(error);
+            this.aiResult = this.buildLocalAdvice();
+            this.setNotice("未连接到本地 AI 服务，已改为使用页面内置规则生成建议。");
+          } finally {
+            this.loadingAI = false;
+          }
         }
       },
       watch: {
-        displayedList(newList) {
-          if (!newList.length) {
+        displayedList(list) {
+          if (!list.length) {
             this.selectedStation = null;
             return;
           }
-          if (!this.selectedStation || !newList.find(item => item.name === this.selectedStation.name)) {
-            this.selectedStation = newList[0];
+          if (!this.selectedStation || !list.find(item => item.name === this.selectedStation.name)) {
+            this.selectedStation = list[0];
+          }
+        },
+        queryDate() {
+          if (this.allCsvData.length) {
+            this.searchData(false);
           }
         }
       }
-    }).mount('#app');
+    }).mount("#app");
   </script>
 </body>
 </html>
